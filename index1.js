@@ -22,7 +22,30 @@ db.serialize(function()
     db.run("INSERT INTO Department VALUES('Music', 'Packard', 80000)");
     db.run("INSERT INTO Department VALUES('Physics', 'Watson', 70000)");
 
+    
     db.each("SELECT DISTINCT Room_number, Building FROM Classroom WHERE Capacity>50" , function(err,row){
         console.log(row.Room_number,row.Building);
     });
+
+    db.each("SELECT DISTINCT Dept_name FROM Department WHERE Budget>85000", function(err,row){
+        console.log(row.Dept_name);
+    });
+    
+    let depts = {}
+    db.each("SELECT DISTINCT Dept_name, Capacity FROM Department NATURAL JOIN Classroom" , function(err,row){
+
+        if(depts[row.Dept_name] === undefined)
+            depts[row.Dept_name]=0;
+
+            depts[row.Dept_name] += row.Capacity;
+
+    },function(err,count){
+        let keys = Object.keys(depts);
+
+        for( let i=0; i != keys.length; ++i){
+            console.log(keys[i] + ":"+depts[keys[i]]);
+        }
+    });
+    
+
 });
