@@ -46,6 +46,4 @@ db.serialize(function()
             console.log(keys[i] + ":"+depts[keys[i]]);
         }
     });
-    
-
 });
